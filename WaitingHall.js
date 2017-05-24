@@ -3,6 +3,7 @@ var Enumerable = require('linq');
 var bodyParser = require('body-parser');
 var util = require('./util/util.js');
 var MatchCenter = require("./MatchCenter.js");
+require("./RuntimeData");
 var app = express()
 
 // 创建 application/x-www-form-urlencoded 编码解析
@@ -37,31 +38,46 @@ app.post('/login', urlencodedParser, function (req, res) {
         return;
     }
 
-    Enumerable.from(usertable).forEach(function(u)
-    {
-        if(u.userid == req.body.userid && u.password == req.body.password)
-        {
-            var cre = util.NewGuid();
+    // Enumerable.from(usertable).forEach(function(u)
+    // {
+        // if(u.userid == req.body.userid && u.password == req.body.password)
+        // {
+        //     var cre = util.NewGuid();
+        //
+        //     response = {
+        //         state:200,
+        //         credential:cre
+        //     };
+        //
+        //     onlineTable[cre] = u.userid;
+        //
+        //     console.log(response);
+        //     res.end(JSON.stringify(response));
+        //     return;
+        // }
+    //
+    //
+    // });
 
-            response = {
-                state:200,
-                credential:cre
-            };
-
-            onlineTable[cre] = u.userid;
-
-            console.log(response);
-            res.end(JSON.stringify(response));
-            return;
-        }
-    });
+    var cre = util.NewGuid();
 
     response = {
-        state:801
+        state:200,
+        credential:cre
     };
+
+    onlineTable[cre] = u.userid;
 
     console.log(response);
     res.end(JSON.stringify(response));
+    return;
+
+    // response = {
+    //     state:801
+    // };
+    //
+    // console.log(response);
+    // res.end(JSON.stringify(response));
 
     // 输出 JSON 格式
 })
@@ -74,7 +90,7 @@ app.post('/startmatch', urlencodedParser, function (req, res) {
         {
             response = {
                 state:200,
-                matchserveraddress:"192.168.70.6:20001"
+                matchserveraddress:global.GameServerAddress
             };
             MatchCenter.AddPlayerToMatchRoom(req.body.credential,onlineTable[key]);
             console.log(response);

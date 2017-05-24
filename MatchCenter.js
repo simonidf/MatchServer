@@ -1,6 +1,7 @@
 /**
  * Created by simon on 2017/5/17.
  */
+require("./RuntimeData");
 const WebSocket = require('ws');
 
 var playerTable = {};
