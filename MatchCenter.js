@@ -67,7 +67,7 @@ function OnReceiveMsg(session,route,cre) {
             BroadCastRoomInfo(room);
 
 
-            if(room.users.length==1)
+            if(room.users.length==2)
             {
 
                 console.log(GetRoomCres(room))
@@ -118,7 +118,7 @@ function GetAvaliableRoom() {
 
     for(var i=0;i<roomTable.length;i++){
         console.log(roomTable[i].userNum);
-        if(roomTable[i].users.length < 1)
+        if(roomTable[i].users.length < 2)
         {
             return roomTable[i];
         }
