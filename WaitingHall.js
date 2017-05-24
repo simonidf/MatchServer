@@ -66,7 +66,7 @@ app.post('/login', urlencodedParser, function (req, res) {
         credential:cre
     };
 
-    onlineTable[cre] = u.userid;
+    onlineTable[cre] = req.body.userid;
 
     console.log(response);
     res.end(JSON.stringify(response));
