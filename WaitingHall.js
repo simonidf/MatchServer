@@ -90,7 +90,7 @@ app.post('/startmatch', urlencodedParser, function (req, res) {
         {
             response = {
                 state:200,
-                matchserveraddress:global.GameServerAddress
+                matchserveraddress:global.MatchServerAddress
             };
             MatchCenter.AddPlayerToMatchRoom(req.body.credential,onlineTable[key]);
             console.log(response);

@@ -2,6 +2,7 @@
  * Created by simon on 2017/5/17.
  */
 require("./RuntimeData");
+var util = require('./util/util.js');
 const WebSocket = require('ws');
 
 var playerTable = {};
@@ -51,6 +52,7 @@ function OnReceiveMsg(session,route,cre) {
         if(playerTable[cre] != null)
         {
             playerTable[cre].session = session;
+            playerTable[cre].cre = cre;
             var room = GetAvaliableRoom();
             room.users.push(playerTable[cre]);
             console.log("broadcast");
@@ -67,8 +69,13 @@ function OnReceiveMsg(session,route,cre) {
 
             if(room.users.length==1)
             {
-                BroadCastRoomGameServerInfo(room);
-                RemoveRoom(room);
+
+                console.log(GetRoomCres(room))
+
+                util.SendCredentials(GetRoomCres(room),function (data) {
+                    BroadCastRoomGameServerInfo(room);
+                    RemoveRoom(room);
+                });
             }
         }
     }
@@ -146,13 +153,25 @@ function BroadCastRoomInfo(room) {
 
 function BroadCastRoomGameServerInfo(room) {
 
-    var content = "gameserverinfo*" + "192.168.70.6:8999";
+    var content = "gameserverinfo*" + global.GameServerAddress;
 
     console.log(content);
 
     for(var i=0;i<room.users.length;i++){
         room.users[i].session.send(content);
     }
+}
+
+function GetRoomCres(room) {
+    var cres = "";
+    for(var i=0;i<room.users.length;i++){
+        cres += room.users[i].cre;
+        if(i<=room.users.length-1) {
+            cres += ",";
+        }
+
+    }
+    return cres;
 }
 
 function RoomRemoveUserBySession(room,session) {
